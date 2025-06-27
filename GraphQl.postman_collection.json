@@ -1,0 +1,407 @@
+{
+	"info": {
+		"_postman_id": "4f09370b-2008-4ed6-be9f-34531a6b1462",
+		"name": "GraphQl",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8216132"
+	},
+	"item": [
+		{
+			"name": "List user with graphQL",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer e263ec19315c759929d3e87dc11125c29090bb0d654ecf7ee1505365a8c29beb"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query{users {pageInfo {endCursor startCursor hasNextPage hasPreviousPage} totalCount nodes {id name email gender status}}}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "https://gorest.co.in/public/v2/graphql",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v2",
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Verifica que la respuesta sea exitosa",
+							"if (pm.response.code === 200) {",
+							"    // Parsea el JSON de la respuesta",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    // Extrae el ID del usuario (navegando por la estructura del JSON)",
+							"    const userId = responseData.data.createUser.user.id;",
+							"    ",
+							"    // Guarda el ID en una variable de entorno",
+							"    pm.environment.set(\"USER_ID\", userId);",
+							"    ",
+							"    // Opcional: Muestra un mensaje en la consola",
+							"    console.log(\"ID guardado en variable USER_ID:\", userId);",
+							"} else {",
+							"    console.log(\"Error en la respuesta:\", pm.response.code);",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer e263ec19315c759929d3e87dc11125c29090bb0d654ecf7ee1505365a8c29beb"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation{createUser(input: {name: \"Fer Mar\" gender: \"male\" email: \"fer.mar01@gmail.com\" status: \"active\"}) {user{id name gender email status}}}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "https://gorest.co.in/public/v2/graphql",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v2",
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"pm.test(\"Validate the user object has required fields\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.data).to.exist;",
+							"    pm.expect(responseData.data.user).to.exist;",
+							"    ",
+							"    const user = responseData.data.user;",
+							"    pm.expect(user).to.have.all.keys('id', 'name', 'email', 'gender', 'status');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Email is in a valid format\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.data).to.be.an('object');",
+							"    pm.expect(responseData.data.user).to.be.an('object');",
+							"    ",
+							"    const email = responseData.data.user.email;",
+							"    const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;",
+							"    ",
+							"    pm.expect(email).to.match(emailRegex, \"Email format is invalid\");",
+							"});",
+							"var template = `",
+							"<style type=\"text/css\">",
+							"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}",
+							"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}",
+							"    .tftable tr {background-color:#ffffff;}",
+							"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}",
+							"    .tftable tr:hover {background-color:#e0ffff;}",
+							"</style>",
+							"",
+							"<table class=\"tftable\" border=\"1\">",
+							"    <tr>",
+							"        <th>ID</th>",
+							"        <th>Name</th>",
+							"        <th>Email</th>",
+							"    </tr>",
+							"    <tr>",
+							"        <td>{{response.user.id}}</td>",
+							"        <td>{{response.user.name}}</td>",
+							"        <td>{{response.user.email}}</td>",
+							"    </tr>",
+							"</table>",
+							"`;",
+							"",
+							"function constructVisualizerPayload() {",
+							"    return { response: pm.response.json() };",
+							"}",
+							"",
+							"pm.visualizer.set(template, constructVisualizerPayload());"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer e263ec19315c759929d3e87dc11125c29090bb0d654ecf7ee1505365a8c29beb"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query($userId: ID!) {\n  user(id: $userId) {\n    id\n    name\n    email\n    gender\n    status\n  }\n}\n\n# query{user(id: 7970405) { id name email gender status }}",
+						"variables": "{\n  \"userId\": {{USER_ID}}\n}"
+					}
+				},
+				"url": {
+					"raw": "https://gorest.co.in/public/v2/graphql",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v2",
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.eql(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.data).to.exist;",
+							"    pm.expect(responseData.data.updateUser).to.exist;",
+							"    pm.expect(responseData.data.updateUser.user).to.exist;",
+							"",
+							"    const user = responseData.data.updateUser.user;",
+							"",
+							"    pm.expect(user).to.have.all.keys('id', 'name', 'gender', 'email', 'status');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Email should be in a valid format\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.data.updateUser.user.email).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/, \"Email format is invalid\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Validate that the 'status' field contains only expected values\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.data.updateUser.user).to.have.property('status');",
+							"    ",
+							"    const validStatuses = [\"active\", \"inactive\"];",
+							"    pm.expect(validStatuses).to.include(responseData.data.updateUser.user.status);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer e263ec19315c759929d3e87dc11125c29090bb0d654ecf7ee1505365a8c29beb"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation UpdateUser($userId: Int!) {\n  updateUser(input: {\n    id: $userId\n    name: \"Fercis2 Marcis\"\n    email: \"fercis.marcis01@gmail.com\"\n    status: \"active\"\n  }) {\n    user {\n      id\n      name\n      gender\n      email\n      status\n    }\n  }\n}\n\n\n\n\n# mutation{updateUser(input: {id: 7970398 name: \"Fercis Marcis\" email: \"fercis.marcis01@gmail.com\" status: \"active\"}) {user{id name gender email status}}}",
+						"variables": "{\n  \"userId\": {{USER_ID}}\n}"
+					}
+				},
+				"url": {
+					"raw": "https://gorest.co.in/public/v2/graphql",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v2",
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.eql(200);",
+							"});",
+							"",
+							"pm.test(\"Validate the schema of the response\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData).to.have.property('data').that.is.an('object');",
+							"    pm.expect(responseData.data).to.have.property('deleteUser').that.is.an('object');",
+							"    pm.expect(responseData.data.deleteUser).to.have.property('user').that.is.an('object');",
+							"    ",
+							"    const user = responseData.data.deleteUser.user;",
+							"    pm.expect(user).to.have.property('id').that.is.a('number');",
+							"    pm.expect(user).to.have.property('name').that.is.a('string');",
+							"    pm.expect(user).to.have.property('gender').that.is.a('string');",
+							"    pm.expect(user).to.have.property('email').that.is.a('string');",
+							"    pm.expect(user).to.have.property('status').that.is.a('string');",
+							"});",
+							"",
+							"",
+							"pm.test(\"User object has required fields\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.data).to.exist;",
+							"    pm.expect(responseData.data.deleteUser).to.exist;",
+							"    pm.expect(responseData.data.deleteUser.user).to.exist;",
+							"",
+							"    const user = responseData.data.deleteUser.user;",
+							"    pm.expect(user).to.have.all.keys('id', 'name', 'gender', 'email', 'status');",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer e263ec19315c759929d3e87dc11125c29090bb0d654ecf7ee1505365a8c29beb"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation DeleteUser($userId: Int!) {\n  deleteUser(input: {\n    id: $userId\n      }) {\n    user {\n      id\n      name\n      gender\n      email\n      status\n    }\n  }\n}\n\n\n\n\n#mutation{deleteUser(input: {id: 7970404}){user {id name email gender status}}}",
+						"variables": "{\n  \"userId\": {{USER_ID}}\n}"
+					}
+				},
+				"url": {
+					"raw": "https://gorest.co.in/public/v2/graphql",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v2",
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

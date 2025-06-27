@@ -1,0 +1,271 @@
+{
+	"info": {
+		"_postman_id": "a0724ea2-1a92-42cb-a393-6aa73bff97b4",
+		"name": "Collection Entrevistas",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8216132"
+	},
+	"item": [
+		{
+			"name": "pruebas de variables",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"variable1\", \"fer\"); //seteo valor en variable de entorno.Si no esta la crea\r",
+							"\r",
+							"pm.variables.set(\"variable2\", \"ferk\"); //seteo variable local\r",
+							"\r",
+							"console.log(pm.variables.get(\"variable1\"));\r",
+							"\r",
+							"//muestra texto del body\r",
+							"//console.log(pm.response.text());\r",
+							"\r",
+							"\r",
+							"/*\r",
+							"//access a variable at any scope including local\r",
+							"pm.variables.get(\"variable_key\");\r",
+							"\r",
+							"//access an environment variable\r",
+							"pm.environment.get(\"variable_key\");\r",
+							"\r",
+							"//access a collection variable\r",
+							"pm.collectionVariables.get(\"variable_key\");\r",
+							"\r",
+							"//access a global variable\r",
+							"pm.globals.get(\"variable_key\");\r",
+							"\r",
+							"*/"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/status/200",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"status",
+						"200"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "pruebas de dynamic variables",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://postman-echo.com/get?test={{$randomInt}}",
+					"protocol": "https",
+					"host": [
+						"postman-echo",
+						"com"
+					],
+					"path": [
+						"get"
+					],
+					"query": [
+						{
+							"key": "test",
+							"value": "{{$randomInt}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "pruebas de test",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"/* */\r",
+							"\r",
+							"//VERIFICA SI EL STATUS ES N\r",
+							"pm.test(\"Status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"//VERIFICA SI TIENE UN JSONBODY O NO\r",
+							"pm.test(\"response should be okay to process\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    //pm.response.to.have.jsonBody(\"\");\r",
+							"    pm.response.to.not.have.jsonBody(\"error\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"//VERIFICA SI TIENE UN BODY Y ES JSON\r",
+							"pm.test(\"response must be valid and have a body\", function () {\r",
+							"     pm.response.to.be.ok;\r",
+							"     pm.response.to.be.withBody;\r",
+							"     pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"\r",
+							"//Verifica si existe el texto en el response, como variable o valor\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"20\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"//verifica si todo el body es igual a un texto\r",
+							"pm.test(\"Body is correct\", function () {\r",
+							"    pm.response.to.have.body(\"\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"//VERIFICA UN VALOR DEL JSON, nose xq no me anduvo\r",
+							"pm.test(\"Your test name\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.value).to.eql(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"//validacion con schema tv4\r",
+							"var schema = {\r",
+							" \"items\": {\r",
+							" \"type\": \"integer\"\r",
+							" }\r",
+							"};\r",
+							"\r",
+							"var data = [200];\r",
+							"\r",
+							"pm.test('Schema is valid', function() {\r",
+							"  pm.expect(tv4.validate(data, schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/status/200",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"status",
+						"200"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "pruebas de String y Json",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"//crea una variable local con un string\r",
+							"var array = [1, 2, 3, 4];\r",
+							"\r",
+							"//me lo agrega en una variable de entorno como json array: [ 1, 2, 3, 4 ]\r",
+							"pm.environment.set(\"array1\", JSON.stringify(array, null, 2)); \r",
+							"\r",
+							"//me lo agrega como una variable de entorno como array: 1,2,3,4\r",
+							"pm.environment.set(\"array2\", array);    \r",
+							"\r",
+							"//crea una variable como json obj\r",
+							"var obj = { a: [1, 2, 3, 4], b: { c: 'val' } };\r",
+							"pm.environment.set(\"obj1\", JSON.stringify(obj));\r",
+							"\r",
+							"\r",
+							"//si quiero pasarla a otra variable local\r",
+							"var value = pm.environment.get(\"array1\");\r",
+							"\r",
+							"//si quiero pasarlo convirtiendolo de json array a array\r",
+							"var array8 = JSON.parse(pm.environment.get(\"array1\"));\r",
+							"\r",
+							"\r",
+							"\r",
+							"//imprimo\r",
+							"console.log(array);\r",
+							"console.log(pm.environment.get(\"array1\"));\r",
+							"console.log(pm.environment.get(\"array2\"));\r",
+							"console.log(pm.environment.get(\"obj1\"));\r",
+							"console.log(array8);\r",
+							"\r",
+							"\r",
+							"//elimino las variables\r",
+							"pm.environment.unset(\"array1\");\r",
+							"pm.environment.unset(\"array2\");\r",
+							"pm.environment.unset(\"obj1\");\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/status/200",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"status",
+						"200"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

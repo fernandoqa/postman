@@ -1,0 +1,102 @@
+{
+	"info": {
+		"_postman_id": "25da4ca5-dda9-4929-aa64-998452c28cda",
+		"name": "Tokens",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8216132"
+	},
+	"item": [
+		{
+			"name": "TEMP",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"temp1\");\r",
+							"\r",
+							"postman.setNextRequest(\"TEMP2\");\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/status/200",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"status",
+						"200"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Use token",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Reemplazá con el dominio real de tu request (sin https://)",
+							"const domain = 'dummyjson.com';",
+							"",
+							"pm.cookies.jar().clear(domain, (error) => {",
+							"    if (!error) {",
+							"        console.log(`✅ Todas las cookies del dominio \"${domain}\" fueron eliminadas.`);",
+							"    } else {",
+							"        console.error(`❌ Error al eliminar cookies:`, error);",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{accessToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://dummyjson.com/auth/products",
+					"protocol": "https",
+					"host": [
+						"dummyjson",
+						"com"
+					],
+					"path": [
+						"auth",
+						"products"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
